@@ -1,4 +1,4 @@
-package com.example.vaadintutorial
+package com.example.vaadintutorial.model
 
 import java.io.Serializable
 import java.time.LocalDate

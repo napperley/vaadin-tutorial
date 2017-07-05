@@ -1,4 +1,4 @@
-package com.example.vaadintutorial
+package com.example.vaadintutorial.model
 
 class CustomerComparator : Comparator<Customer> {
     override fun compare(o1: Customer, o2: Customer): Int {

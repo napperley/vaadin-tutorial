@@ -1,4 +1,4 @@
-package com.example.vaadintutorial
+package com.example.vaadintutorial.model
 
 import java.time.LocalDate
 import java.util.ArrayList
@@ -171,7 +171,7 @@ class CustomerService private constructor() {
     }
 
     companion object {
-        private var instance: CustomerService? = null
-        private val LOGGER = Logger.getLogger(CustomerService::class.java.name)
+        var instance: CustomerService? = null
+        val LOGGER: Logger = Logger.getLogger(CustomerService::class.java.name)
     }
 }
