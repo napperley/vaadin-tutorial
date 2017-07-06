@@ -2,7 +2,6 @@ package com.example.vaadintutorial.model
 
 import java.time.LocalDate
 import java.util.ArrayList
-import java.util.HashMap
 import java.util.Random
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -13,32 +12,29 @@ import java.util.logging.Logger
  *
  * In demos/tutorials/examples, get a reference to this service class with [CustomerService.instance].
  */
-class CustomerService private constructor() {
-    private val contacts = HashMap<Long, Customer>()
+class CustomerService {
+    private val contacts = mutableMapOf<Long, Customer>()
     private var nextId: Long = 0
 
-    /**
-     * @return all available Customer objects.
-     */
-    @Synchronized fun findAll(): List<Customer> = findAll(null)
+    init {
+        ensureTestData()
+    }
 
     /**
      * Finds all Customer's that match given filter.
 
-     * @param stringFilter filter that returned objects should match or null/empty string if all objects should be
+     * @param stringFilter filter that returned objects should match or empty string if all objects should be
      * returned.
      * @return list a Customer objects
      */
-    @Synchronized fun findAll(stringFilter: String?): List<Customer> {
-        val arrayList = ArrayList<Customer>()
+    @Synchronized fun findAll(stringFilter: String = ""): List<Customer> {
+        val arrayList = mutableListOf<Customer>()
 
         for (contact in contacts.values) {
-            val passesFilter = stringFilter == null || stringFilter.isEmpty() || contact.
-                toString().
-                toLowerCase().
-                contains(stringFilter.toLowerCase())
+            val passesFilter = stringFilter.isEmpty() || contact.toString().toLowerCase().contains(
+                stringFilter.toLowerCase())
 
-            if (passesFilter) arrayList.add(contact.copy())
+            if (passesFilter) arrayList += contact.copy()
         }
         arrayList.sortWith(CustomerComparator())
         return arrayList
@@ -47,26 +43,19 @@ class CustomerService private constructor() {
     /**
      * Finds all Customer's that match given filter and limits the resultset.
 
-     * @param stringFilter filter that returned objects should match or null/empty string if all objects should be
+     * @param stringFilter filter that returned objects should match or empty string if all objects should be
      * returned.
      * @param start the index of first result
      * @param maxresults maximum result count
      * @return list a Customer objects
      */
-    @Synchronized fun findAll(stringFilter: String?, start: Int, maxresults: Int): List<Customer> {
+    @Synchronized fun findAll(stringFilter: String = "", start: Int, maxresults: Int): List<Customer> {
         val arrayList = ArrayList<Customer>()
 
         for (contact in contacts.values) {
-            try {
-                val passesFilter = stringFilter == null || stringFilter.isEmpty() || contact.
-                    toString().
-                    toLowerCase().
-                    contains(stringFilter.toLowerCase())
-                if (passesFilter) arrayList.add(contact.copy())
-            } catch (ex: CloneNotSupportedException) {
-                Logger.getLogger(CustomerService::class.java.name).log(Level.SEVERE, null, ex)
-            }
-
+            val passesFilter = stringFilter.isEmpty() || contact.toString().toLowerCase().contains(
+                stringFilter.toLowerCase())
+            if (passesFilter) arrayList += contact.copy()
         }
 
         arrayList.sortWith(CustomerComparator())
@@ -171,7 +160,7 @@ class CustomerService private constructor() {
     }
 
     companion object {
-        var instance: CustomerService? = null
+        val instance by lazy { CustomerService() }
         val LOGGER: Logger = Logger.getLogger(CustomerService::class.java.name)
     }
 }
