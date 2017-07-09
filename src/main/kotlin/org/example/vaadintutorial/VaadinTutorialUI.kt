@@ -34,6 +34,13 @@ class VaadinTutorialUI : UI() {
             setSizeFull()
             setExpandRatio(grid, 1F)
         }
+        val addCustomerBtn = Button("Add a new customer").apply {
+            addClickListener {
+                grid.asSingleSelect().clear()
+                form.changeCustomer(Customer())
+            }
+        }
+        val toolbar = HorizontalLayout(filterLayout, addCustomerBtn)
 
         with(filterTxt) {
             placeholder = "Filter by name..."
@@ -43,9 +50,13 @@ class VaadinTutorialUI : UI() {
         with(grid) {
             setColumns("firstName", "lastName", "email")
             setSizeFull()
+            asSingleSelect().addValueChangeListener { event ->
+                if (event.value == null) form.isVisible = false else form.changeCustomer(event.value)
+            }
         }
         updateList()
-        content = VerticalLayout(filterLayout, subLayout)
+        content = VerticalLayout(toolbar, subLayout)
+        form.isVisible = false
     }
 
     fun updateList() {

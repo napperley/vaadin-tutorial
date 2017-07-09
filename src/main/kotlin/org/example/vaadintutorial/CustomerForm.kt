@@ -14,7 +14,7 @@ class CustomerForm(val ui: VaadinTutorialUI) : FormLayout() {
     private val lastName = TextField("Last name")
     private val email = TextField("Email")
     private val status = NativeSelect<CustomerStatus>("Status")
-    private val birthdate = DateField("Birthday")
+    private val birthDate = DateField("Birthday")
     private val save = Button("Save")
     private val delete = Button("Delete")
     private val service = CustomerService.instance
@@ -25,7 +25,7 @@ class CustomerForm(val ui: VaadinTutorialUI) : FormLayout() {
         val btnLayout = HorizontalLayout(save, delete)
 
         setSizeUndefined()
-        addComponents(firstName, lastName, email, status, birthdate, btnLayout)
+        addComponents(firstName, lastName, email, status, birthDate, btnLayout)
         status.setItems(*CustomerStatus.values())
         with(save) {
             styleName = ValoTheme.BUTTON_PRIMARY
