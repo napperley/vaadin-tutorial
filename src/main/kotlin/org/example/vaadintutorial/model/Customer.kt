@@ -1,4 +1,4 @@
-package com.example.vaadintutorial.model
+package org.example.vaadintutorial.model
 
 import java.io.Serializable
 import java.time.LocalDate
@@ -15,7 +15,7 @@ data class Customer(
     var status: CustomerStatus? = null,
     var email: String = ""
 ) : Serializable {
-    val isPersisted: Boolean
+    val persisted: Boolean
         get() = id != null
 
     override fun toString(): String = "$firstName $lastName"

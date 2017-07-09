@@ -1,7 +1,9 @@
-package com.example.vaadintutorial
+@file:Suppress("DEPRECATION")
 
-import com.example.vaadintutorial.model.Customer
-import com.example.vaadintutorial.model.CustomerService
+package org.example.vaadintutorial
+
+import org.example.vaadintutorial.model.Customer
+import org.example.vaadintutorial.model.CustomerService
 import com.vaadin.server.VaadinRequest
 import com.vaadin.annotations.Theme
 import com.vaadin.annotations.Title
@@ -17,6 +19,7 @@ class VaadinTutorialUI : UI() {
     private val service = CustomerService.instance
     private val grid = Grid<Customer>(Customer::class.java)
     private val filterTxt = TextField()
+    private val form = CustomerForm(this)
 
     override fun init(request: VaadinRequest) {
         val clearFilterBtn = Button(FontAwesome.TIMES).apply {
@@ -27,16 +30,22 @@ class VaadinTutorialUI : UI() {
             addComponents(filterTxt, clearFilterBtn)
             styleName = ValoTheme.LAYOUT_COMPONENT_GROUP
         }
-        val mainLayout = VerticalLayout(filterLayout, grid)
+        val subLayout = HorizontalLayout(grid, form).apply {
+            setSizeFull()
+            setExpandRatio(grid, 1F)
+        }
 
-        filterTxt.apply {
+        with(filterTxt) {
             placeholder = "Filter by name..."
             addValueChangeListener { updateList() }
             valueChangeMode = ValueChangeMode.LAZY
         }
-        grid.setColumns("firstName", "lastName", "email")
+        with(grid) {
+            setColumns("firstName", "lastName", "email")
+            setSizeFull()
+        }
         updateList()
-        content = mainLayout
+        content = VerticalLayout(filterLayout, subLayout)
     }
 
     fun updateList() {

@@ -1,4 +1,4 @@
-package com.example.vaadintutorial.model
+package org.example.vaadintutorial.model
 
 import java.time.LocalDate
 import java.util.ArrayList
@@ -14,6 +14,13 @@ import java.util.logging.Logger
  */
 class CustomerService {
     private val contacts = mutableMapOf<Long, Customer>()
+    @Suppress("Destructure")
+    private val customerSorter = Comparator<Customer> { c1: Customer, c2: Customer ->
+        val id1 = c1.id ?: 0
+        val id2 = c2.id ?: 0
+
+        id2.toInt() - id1.toInt()
+    }
     private var nextId: Long = 0
 
     init {
@@ -22,7 +29,6 @@ class CustomerService {
 
     /**
      * Finds all Customer's that match given filter.
-
      * @param stringFilter filter that returned objects should match or empty string if all objects should be
      * returned.
      * @return list a Customer objects
@@ -36,13 +42,12 @@ class CustomerService {
 
             if (passesFilter) arrayList += contact.copy()
         }
-        arrayList.sortWith(CustomerComparator())
+        arrayList.sortWith(customerSorter)
         return arrayList
     }
 
     /**
      * Finds all Customer's that match given filter and limits the resultset.
-
      * @param stringFilter filter that returned objects should match or empty string if all objects should be
      * returned.
      * @param start the index of first result
@@ -58,7 +63,7 @@ class CustomerService {
             if (passesFilter) arrayList += contact.copy()
         }
 
-        arrayList.sortWith(CustomerComparator())
+        arrayList.sortWith(customerSorter)
         var end = start + maxresults
         if (end > arrayList.size) {
             end = arrayList.size

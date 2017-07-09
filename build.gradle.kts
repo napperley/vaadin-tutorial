@@ -1,4 +1,4 @@
-import fi.jasoft.plugin.tasks.RunTask as VaadinRun
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val KOTLIN_VER = "1.1.3-2"
 val VAADIN_VER = "8.0.6"
@@ -11,25 +11,27 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { setUrl("https://plugins.gradle.org/m2/") }
     }
 
     dependencies {
         // Have to manually specify the version due to a Gradle Kotlin DSL bug.
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.3-2")
-        // Have to manually specify the version due to a Gradle Kotlin DSL bug.
+        // Have to manually specify the version due to a Gradle Kotlin DSL bug. Old version of Vaadin plugin.
         classpath("fi.jasoft.plugin:gradle-vaadin-plugin:1.1.12")
-//        classpath("com.devsoap.plugin.vaadin:gradle-vaadin-plugin:1.2.0")
+//        classpath("com.devsoap.plugin.vaadin:gradle-vaadin-plugin:1.2.0.beta1")
     }
 }
 
 plugins {
     application
-    kotlin("jvm")
 }
 
 apply {
-    //    plugin("com.devsoap.plugin.vaadin")
+    //        plugin("com.devsoap.plugin.vaadin")
+    // Old version of Vaadin plugin.
     plugin("fi.jasoft.plugin.vaadin")
+    plugin("kotlin")
 }
 
 repositories {
@@ -40,4 +42,11 @@ repositories {
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:$KOTLIN_VER")
     compile("org.jetbrains.kotlin:kotlin-runtime:$KOTLIN_VER")
+}
+
+tasks {
+    // Fetching the "compileKotlin" task and customising it.
+    "compileKotlin"(KotlinCompile::class) {
+        doLast { println("Finished compiling.") }
+    }
 }
