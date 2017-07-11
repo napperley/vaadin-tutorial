@@ -17,20 +17,15 @@ buildscript {
     dependencies {
         // Have to manually specify the version due to a Gradle Kotlin DSL bug.
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.3-2")
-        // Have to manually specify the version due to a Gradle Kotlin DSL bug. Old version of Vaadin plugin.
-        classpath("fi.jasoft.plugin:gradle-vaadin-plugin:1.1.12")
-//        classpath("com.devsoap.plugin.vaadin:gradle-vaadin-plugin:1.2.0.beta1")
     }
 }
 
 plugins {
     application
+    id("com.devsoap.plugin.vaadin").version("1.2.0.beta1")
 }
 
 apply {
-    //        plugin("com.devsoap.plugin.vaadin")
-    // Old version of Vaadin plugin.
-    plugin("fi.jasoft.plugin.vaadin")
     plugin("kotlin")
 }
 
